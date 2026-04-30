@@ -13,6 +13,7 @@ const scoreEl = document.querySelector('.game-score');
 const messageStart = document.querySelector('.message-start');
 const messageWin = document.querySelector('.message-win');
 const messageLose = document.querySelector('.message-lose');
+const cells = document.querySelectorAll('.field-cell');
 
 window.game = game;
 
@@ -21,10 +22,43 @@ window.game = game;
 function updateUI() {
   scoreEl.textContent = game.getScore();
 
+  // const statusGame = game.getStatus();
+
+  // messageStart.classList.add('hidden');
+
+  // messageWin.classList.add('hidden');
+  // messageLose.classList.add('hidden');
+
+  // if (statusGame === 'win') {
+  //   messageWin.classList.remove('hidden');
+  // }
+
+  // if (statusGame === 'lose') {
+  //   messageLose.classList.remove('hidden');
+  // }
+
+  // Отримуємо стан поля (масив масивів)
+  const board = game.getState();
+  // Перетворюємо 2D масив у плоский (1D), щоб легко пройтися циклом
+  const flatBoard = board.flat();
+
+  // Оновлюємо кожну клітинку
+  cells.forEach((cell, index) => {
+    const value = flatBoard[index];
+
+    cell.textContent = value === 0 ? '' : value; // Якщо 0, то порожньо
+
+    // Додатково: можна додавати класи для кольору (наприклад, cell-2, cell-4)
+    cell.className = 'field-cell'; // скидаємо класи
+
+    if (value > 0) {
+      cell.classList.add(`cell-${value}`);
+    }
+  });
+
   const statusGame = game.getStatus();
 
   messageStart.classList.add('hidden');
-
   messageWin.classList.add('hidden');
   messageLose.classList.add('hidden');
 

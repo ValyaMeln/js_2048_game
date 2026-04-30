@@ -271,5 +271,3 @@ export default class Game {
     return a.every((val, i) => val === b[i]);
   }
 }
-
-// export class Game {};
