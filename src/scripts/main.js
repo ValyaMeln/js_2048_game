@@ -14,6 +14,8 @@ const messageStart = document.querySelector('.message-start');
 const messageWin = document.querySelector('.message-win');
 const messageLose = document.querySelector('.message-lose');
 const cells = document.querySelectorAll('.field-cell');
+const startBtn = document.querySelector('.button.start');
+const restartBtn = document.querySelector('.button.restart');
 
 window.game = game;
 
@@ -22,59 +24,57 @@ window.game = game;
 function updateUI() {
   scoreEl.textContent = game.getScore();
 
-  // const statusGame = game.getStatus();
+  const statusGame = game.getStatus();
 
-  // messageStart.classList.add('hidden');
+  // Керування кнопками: Start видно тільки в idle, інакше — Restart
+  if (statusGame === 'idle') {
+    startBtn.classList.remove('hidden');
+    restartBtn.classList.add('hidden');
+  } else {
+    startBtn.classList.add('hidden');
+    restartBtn.classList.remove('hidden');
+  }
 
-  // messageWin.classList.add('hidden');
-  // messageLose.classList.add('hidden');
-
-  // if (statusGame === 'win') {
-  //   messageWin.classList.remove('hidden');
-  // }
-
-  // if (statusGame === 'lose') {
-  //   messageLose.classList.remove('hidden');
-  // }
-
-  // Отримуємо стан поля (масив масивів)
+  // Оновлення ігрового поля та кольорів плиток
   const board = game.getState();
-  // Перетворюємо 2D масив у плоский (1D), щоб легко пройтися циклом
   const flatBoard = board.flat();
 
-  // Оновлюємо кожну клітинку
   cells.forEach((cell, index) => {
     const value = flatBoard[index];
 
-    cell.textContent = value === 0 ? '' : value; // Якщо 0, то порожньо
+    cell.textContent = value === 0 ? '' : value;
 
-    // Додатково: можна додавати класи для кольору (наприклад, cell-2, cell-4)
-    cell.className = 'field-cell'; // скидаємо класи
+    // Скидаємо класи до базового, щоб не дублювалися cell--2, cell--4 тощо
+    cell.className = 'field-cell';
 
     if (value > 0) {
-      cell.classList.add(`cell-${value}`);
+      cell.classList.add(`field-cell--${value}`);
     }
   });
 
-  const statusGame = game.getStatus();
-
-  messageStart.classList.add('hidden');
-  messageWin.classList.add('hidden');
-  messageLose.classList.add('hidden');
-
-  if (statusGame === 'win') {
-    messageWin.classList.remove('hidden');
-  }
-
-  if (statusGame === 'lose') {
-    messageLose.classList.remove('hidden');
-  }
+  // Керування повідомленнями за допомогою toggle
+  messageStart.classList.toggle('hidden', statusGame !== 'idle');
+  messageWin.classList.toggle('hidden', statusGame !== 'win');
+  messageLose.classList.toggle('hidden', statusGame !== 'lose');
 }
+
+// Початковий виклик, щоб інтерфейс відповідав стану "idle"
+updateUI();
 
 // ================= CONTROLS =================
 
 document.addEventListener('keydown', (e) => {
-  game.start();
+  // Реагуємо лише на стрілки
+  const arrows = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+
+  if (!arrows.includes(e.key)) {
+    return;
+  }
+
+  // Автоматичний старт при першому натисканні стрілки
+  if (game.getStatus() === 'idle') {
+    game.start();
+  }
 
   switch (e.key) {
     case 'ArrowLeft':
@@ -94,19 +94,14 @@ document.addEventListener('keydown', (e) => {
   updateUI();
 });
 
-// ================= START BUTTON =================
+// ================= КНОПКИ =================
 
-document.querySelector('.start').addEventListener('click', () => {
+startBtn.addEventListener('click', () => {
   game.start();
   updateUI();
 });
 
-document.querySelector('.restart').addEventListener('click', () => {
+restartBtn.addEventListener('click', () => {
   game.restart();
-
-  document.querySelector('.game-score').textContent = game.getScore();
-
-  document.querySelector('.message-start').classList.remove('hidden');
-  document.querySelector('.message-win').classList.add('hidden');
-  document.querySelector('.message-lose').classList.add('hidden');
+  updateUI();
 });
