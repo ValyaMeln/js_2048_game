@@ -28,6 +28,7 @@ export default class Game {
 
     this.score = 0;
     this.status = 'idle'; // idle | playing | win | lose
+    this.hasStarted = false;
     // eslint-disable-next-line no-console
     console.log(initialState);
   }
@@ -124,6 +125,8 @@ export default class Game {
     }
 
     this.status = 'playing';
+    this.hasStarted = true;
+
     this.addRandomTile();
     this.addRandomTile();
   }
@@ -135,6 +138,7 @@ export default class Game {
     this.board = this.cloneBoard(this.initialState);
     this.score = 0;
     this.status = 'idle';
+    this.hasStarted = true;
   }
 
   // Add your own methods here

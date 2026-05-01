@@ -35,6 +35,14 @@ function updateUI() {
     restartBtn.classList.remove('hidden');
   }
 
+  if (!game.hasStarted) {
+    startBtn.classList.remove('hidden');
+    restartBtn.classList.add('hidden');
+  } else {
+    startBtn.classList.add('hidden');
+    restartBtn.classList.remove('hidden');
+  }
+
   // Оновлення ігрового поля та кольорів плиток
   const board = game.getState();
   const flatBoard = board.flat();
