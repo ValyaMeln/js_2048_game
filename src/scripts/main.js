@@ -26,15 +26,6 @@ function updateUI() {
 
   const statusGame = game.getStatus();
 
-  // Керування кнопками: Start видно тільки в idle, інакше — Restart
-  if (statusGame === 'idle') {
-    startBtn.classList.remove('hidden');
-    restartBtn.classList.add('hidden');
-  } else {
-    startBtn.classList.add('hidden');
-    restartBtn.classList.remove('hidden');
-  }
-
   if (!game.hasStarted) {
     startBtn.classList.remove('hidden');
     restartBtn.classList.add('hidden');

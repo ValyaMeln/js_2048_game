@@ -135,10 +135,13 @@ export default class Game {
    * Resets the game.
    */
   restart() {
-    this.board = this.cloneBoard(this.initialState);
+    this.board = this.createEmptyBoard();
     this.score = 0;
-    this.status = 'idle';
+    this.status = 'playing';
     this.hasStarted = true;
+
+    this.addRandomTile();
+    this.addRandomTile();
   }
 
   // Add your own methods here
